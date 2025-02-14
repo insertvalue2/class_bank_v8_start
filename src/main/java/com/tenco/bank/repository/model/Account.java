@@ -1,6 +1,7 @@
 package com.tenco.bank.repository.model;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 
 import com.tenco.bank.handler.exception.DataDeliveryException;
 import lombok.AllArgsConstructor;
@@ -43,16 +44,23 @@ public class Account {
         }
         return isOk;
     }
-    // 잔액 여부 확인 기능
+    // 잔액 여부 확인 기능 500 / 500
     public void checkBalance(Long amount) {
         if(this.balance < amount) {
             throw new DataDeliveryException("잔액이 부족합니다", HttpStatus.BAD_REQUEST);
         }
     }
     // 계좌 소유자 확인 기능
-    public void checkOwner(Integer pricipalId) {
-        if(this.userId != pricipalId) {
+    public void checkOwner(Integer principalId) {
+        if(this.userId != principalId) {
             throw new DataDeliveryException("본인 계좌가 아닙니다", HttpStatus.BAD_REQUEST);
         }
     }
+
+    // 화폐 형식으로 변환
+    public String formatKoreanWon(Long amount) {
+        DecimalFormat formatter = new DecimalFormat("#,###원");
+        return formatter.format(amount);
+    }
+
 }
